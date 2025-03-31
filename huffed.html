@@ -4,121 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Игровой HUD</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        
-        .hud-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            display: flex;
-            align-items: flex-end;
-            gap: 20px;
-        }
-        
-        .health-bar {
-            width: 200px;
-            height: 25px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .health-fill {
-            height: 100%;
-            width: 100%;
-            background-color: #e74c3c;
-            transition: width 0.3s ease, background-color 0.3s ease;
-        }
-        
-        .health-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Arial', sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 2px black;
-        }
-        
-        .weapon-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 25px;
-            color: white;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="style.css"> </head>
 <body>
     <div class="hud-container">
         <div class="health-bar">
             <div class="health-fill" id="healthFill"></div>
             <div class="health-text" id="healthText">100/100</div>
         </div>
-        <div class="weapon-icon" id="weaponIcon">👊</div>
+        <div class="weapon-icon">
+            <img id="weaponImage" src="images/fist.png" alt="Weapon">
+        </div>
     </div>
 
-    <script>
-        // Игровые переменные
-        let health = 100;
-        let maxHealth = 100;
-        let currentWeapon = 'fist'; // 'fist' или 'pistol'
-        
-        // Элементы DOM
-        const healthFill = document.getElementById('healthFill');
-        const healthText = document.getElementById('healthText');
-        const weaponIcon = document.getElementById('weaponIcon');
-        
-        // Обновление здоровья на HUD
-        function updateHealth(newHealth) {
-            health = Math.max(0, Math.min(maxHealth, newHealth));
-            const healthPercentage = (health / maxHealth) * 100;
-            healthFill.style.width = `${healthPercentage}%`;
-            
-            // Меняем цвет в зависимости от уровня здоровья
-            if (healthPercentage > 60) {
-                healthFill.style.backgroundColor = '#2ecc71'; // зеленый
-            } else if (healthPercentage > 30) {
-                healthFill.style.backgroundColor = '#f39c12'; // оранжевый
-            } else {
-                healthFill.style.backgroundColor = '#e74c3c'; // красный
-            }
-            
-            healthText.textContent = `${health}/${maxHealth}`;
-        }
-        
-        // Смена оружия
-        function changeWeapon(weaponType) {
-            currentWeapon = weaponType;
-            if (currentWeapon === 'pistol') {
-                weaponIcon.textContent = '🔫';
-            } else {
-                weaponIcon.textContent = '👊';
-            }
-        }
-        
-        // Инициализация
-        updateHealth(health);
-        
-        // Экспорт функций для использования в игре
-        window.gameHUD = {
-            updateHealth,
-            changeWeapon
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
