@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровой HUD</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #222;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .hud-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 30px;
+        }
+        
+        .health-bar {
+            width: 200px;
+            height: 30px;
+            background-color: #333;
+            border: 2px solid #555;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .health-fill {
+            height: 100%;
+            width: 100%;
+            background-color: #e74c3c;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .health-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+        
+        .weapon-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #444;
+            border: 2px solid #666;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        
+        .weapon-icon:hover {
+            background-color: #555;
+        }
+        
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        button {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button id="damageBtn">Нанести урон (-10)</button>
+        <button id="healBtn">Исцелить (+10)</button>
+        <button id="changeWeaponBtn">Сменить оружие</button>
+    </div>
+    
+    <div class="hud-container">
+        <div class="health-bar">
+            <div class="health-fill" id="healthFill"></div>
+            <div class="health-text" id="healthText">100/100</div>
+        </div>
+        <div class="weapon-icon" id="weaponIcon">👊</div>
+    </div>
+
+    <script>
+        // Игровые переменные
+        let health = 100;
+        let maxHealth = 100;
+        let currentWeapon = 'fist'; // 'fist' или 'pistol'
+        
+        // Элементы DOM
+        const healthFill = document.getElementById('healthFill');
+        const healthText = document.getElementById('healthText');
+        const weaponIcon = document.getElementById('weaponIcon');
+        const damageBtn = document.getElementById('damageBtn');
+        const healBtn = document.getElementById('healBtn');
+        const changeWeaponBtn = document.getElementById('changeWeaponBtn');
+        
+        // Обновление здоровья на HUD
+        function updateHealth() {
+            const healthPercentage = (health / maxHealth) * 100;
+            healthFill.style.width = `${healthPercentage}%`;
+            
+            // Меняем цвет в зависимости от уровня здоровья
+            if (healthPercentage > 60) {
+                healthFill.style.backgroundColor = '#2ecc71'; // зеленый
+            } else if (healthPercentage > 30) {
+                healthFill.style.backgroundColor = '#f39c12'; // оранжевый
+            } else {
+                healthFill.style.backgroundColor = '#e74c3c'; // красный
+            }
+            
+            healthText.textContent = `${health}/${maxHealth}`;
+        }
+        
+        // Смена оружия
+        function changeWeapon() {
+            if (currentWeapon === 'fist') {
+                currentWeapon = 'pistol';
+                weaponIcon.textContent = '🔫';
+            } else {
+                currentWeapon = 'fist';
+                weaponIcon.textContent = '👊';
+            }
+        }
+        
+        // Нанесение урона
+        damageBtn.addEventListener('click', () => {
+            health = Math.max(0, health - 10);
+            updateHealth();
+        });
+        
+        // Исцеление
+        healBtn.addEventListener('click', () => {
+            health = Math.min(maxHealth, health + 10);
+            updateHealth();
+        });
+        
+        // Смена оружия
+        changeWeaponBtn.addEventListener('click', changeWeapon);
+        weaponIcon.addEventListener('click', changeWeapon);
+        
+        // Инициализация
+        updateHealth();
+    </script>
+</body>
+</html>
