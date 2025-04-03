@@ -3,19 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игровой HUD</title>
-    <link rel="stylesheet" href="hud.css"> </head>
+    <title>Калькулятор разборов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .car-container {
+            margin-bottom: 10px;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .image-item {
+            width: 150px;
+            text-align: center;
+        }
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
 <body>
-    <div class="hud-container">
-        <div class="health-bar">
-            <div class="health-fill" id="healthFill"></div>
-            <div class="health-text" id="healthText">100/100</div>
-        </div>
-        <div class="weapon-icon">
-            <img id="weaponImage" src="images/fist.png" alt="Weapon">
+    <h1>Калькулятор разборов</h1>
+    
+    <div class="input-group">
+        <label for="pricePerDisassembly">Цена за 1 разбор:</label>
+        <input type="number" id="pricePerDisassembly" placeholder="Введите цену за 1 разбор">
+    </div>
+    
+    <div class="input-group">
+        <label for="disassemblyCount">Количество разборов:</label>
+        <input type="number" id="disassemblyCount" placeholder="Введите количество разборов">
+    </div>
+    
+    <h3>Цены за авто:</h3>
+    <div id="carPricesContainer">
+        <div class="car-container">
+            <input type="number" class="carPrice" placeholder="Введите цену за авто">
         </div>
     </div>
-
-    <script src="script.js"></script>
+    <button id="addCarBtn">Добавить еще авто</button>
+    
+    <div class="input-group">
+        <label for="boxPrice">Цена за ящик:</label>
+        <input type="number" id="boxPrice" placeholder="Введите цену за ящик">
+    </div>
+    
+    <button id="calculateBtn">Рассчитать</button>
+    
+    <div id="result"></div>
+    
+    <h3>Добавленные картинки и цены:</h3>
+    <div class="image-container" id="imageContainer">
+        <!-- Здесь будут отображаться добавленные картинки и цены -->
+    </div>
+    
+    <script>
+        // Добавление нового поля для цены авто
+        document.getElementById('addCarBtn').addEventListener('click', function() {
+            const container = document.getElementById('carPricesContainer');
+            const newCarDiv = document.createElement('div');
+            newCarDiv.className = 'car-container';
+            newCarDiv.innerHTML = '<input type="number" class="carPrice" placeholder="Введите цену за авто">';
+            container.appendChild(newCarDiv);
+        });
+        
+        // Расчет результатов
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            // Получаем значения из полей ввода
+            const pricePerDisassembly = parseFloat(document.getElementById('pricePerDisassembly').value) || 0;
+            const disassemblyCount = parseInt(document.getElementById('disassemblyCount').value) || 0;
+            const boxPrice = parseFloat(document.getElementById('boxPrice').value) || 0;
+            
+            // Суммируем цены за все авто
+            const carPrices = document.getElementsByClassName('carPrice');
+            let totalCarPrice = 0;
+            for (let i = 0; i < carPrices.length; i++) {
+                totalCarPrice += parseFloat(carPrices[i].value) || 0;
+            }
+            
+            // Вычисляем общие затраты
+            const totalDisassemblyCost = pricePerDisassembly * disassemblyCount;
+            const totalExpenses = totalDisassemblyCost + totalCarPrice;
+            
+            // Вычисляем разницу
+            const difference = boxPrice - totalExpenses;
+            
+            // Отображаем результат
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = `
+                <strong>Результаты:</strong><br>
+                Общая стоимость разборов: ${totalDisassemblyCost.toFixed(2)}<br>
+                Общая стоимость авто: ${totalCarPrice.toFixed(2)}<br>
+                Всего затрат: ${totalExpenses.toFixed(2)}<br>
+                Цена ящика: ${boxPrice.toFixed(2)}<br>
+                <strong>Разница: ${difference.toFixed(2)}</strong>
+            `;
+        });
+        
+        // Функция для добавления новой картинки и цены (можно вызывать из кода)
+        function addImageWithPrice(imageUrl, price) {
+            const container = document.getElementById('imageContainer');
+            const imageItem = document.createElement('div');
+            imageItem.className = 'image-item';
+            imageItem.innerHTML = `
+                <img src="${imageUrl}" alt="Добавленное изображение">
+                <div>Цена: ${price}</div>
+            `;
+            container.appendChild(imageItem);
+        }
+        
+        // Пример добавления картинки (можно удалить или закомментировать)
+        // addImageWithPrice('https://via.placeholder.com/150', 1500);
+    </script>
 </body>
 </html>
