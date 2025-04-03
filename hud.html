@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор разборов</title>
+    <title>Калькулятор разборов (Только код)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,16 +49,21 @@
         .image-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 20px;
             margin-top: 20px;
         }
         .image-item {
-            width: 150px;
+            width: 180px;
             text-align: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
         }
         .image-item img {
             max-width: 100%;
-            height: auto;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -91,13 +97,13 @@
     
     <div id="result"></div>
     
-    <h3>Добавленные картинки и цены:</h3>
+    <h3>Добавленные картинки (только через код):</h3>
     <div class="image-container" id="imageContainer">
-        <!-- Здесь будут отображаться добавленные картинки и цены -->
+        <!-- Сюда добавляются картинки через JS -->
     </div>
     
     <script>
-        // Добавление нового поля для цены авто
+        // ===== КАЛЬКУЛЯТОР =====
         document.getElementById('addCarBtn').addEventListener('click', function() {
             const container = document.getElementById('carPricesContainer');
             const newCarDiv = document.createElement('div');
@@ -106,30 +112,22 @@
             container.appendChild(newCarDiv);
         });
         
-        // Расчет результатов
         document.getElementById('calculateBtn').addEventListener('click', function() {
-            // Получаем значения из полей ввода
             const pricePerDisassembly = parseFloat(document.getElementById('pricePerDisassembly').value) || 0;
             const disassemblyCount = parseInt(document.getElementById('disassemblyCount').value) || 0;
             const boxPrice = parseFloat(document.getElementById('boxPrice').value) || 0;
             
-            // Суммируем цены за все авто
             const carPrices = document.getElementsByClassName('carPrice');
             let totalCarPrice = 0;
             for (let i = 0; i < carPrices.length; i++) {
                 totalCarPrice += parseFloat(carPrices[i].value) || 0;
             }
             
-            // Вычисляем общие затраты
             const totalDisassemblyCost = pricePerDisassembly * disassemblyCount;
             const totalExpenses = totalDisassemblyCost + totalCarPrice;
-            
-            // Вычисляем разницу
             const difference = boxPrice - totalExpenses;
             
-            // Отображаем результат
-            const resultElement = document.getElementById('result');
-            resultElement.innerHTML = `
+            document.getElementById('result').innerHTML = `
                 <strong>Результаты:</strong><br>
                 Общая стоимость разборов: ${totalDisassemblyCost.toFixed(2)}<br>
                 Общая стоимость авто: ${totalCarPrice.toFixed(2)}<br>
@@ -138,21 +136,31 @@
                 <strong>Разница: ${difference.toFixed(2)}</strong>
             `;
         });
-        
-        // Функция для добавления новой картинки и цены (можно вызывать из кода)
-        function addImageWithPrice(imageUrl, price) {
+
+        // ===== ДОБАВЛЕНИЕ КАРТИНОК (ТОЛЬКО ЧЕРЕЗ КОД) =====
+        /**
+         * Добавляет новую картинку в галерею
+         * @param {string} name - Название картинки
+         * @param {string} imageUrl - Ссылка на изображение
+         * @param {number} price - Цена
+         */
+        function addImage(name, imageUrl, price) {
             const container = document.getElementById('imageContainer');
             const imageItem = document.createElement('div');
             imageItem.className = 'image-item';
             imageItem.innerHTML = `
-                <img src="${imageUrl}" alt="Добавленное изображение">
-                <div>Цена: ${price}</div>
+                <img src="${imageUrl}" alt="${name}" 
+                     onerror="this.src='https://via.placeholder.com/150?text=Ошибка+загрузки'">
+                <div><strong>${name}</strong></div>
+                <div>Цена: ${price.toFixed(2)}</div>
             `;
             container.appendChild(imageItem);
         }
-        
-        // Пример добавления картинки (можно удалить или закомментировать)
-addImageWithPrice('1802-150x150.png', 1500)
+
+        // === ПРИМЕР ДОБАВЛЕНИЯ КАРТИНОК ===
+        // (можно удалить или заменить на свои)
+        addImage("Деталь #1", "https://via.placeholder.com/150/FF0000/FFFFFF?text=Деталь+1", 1200);
+        addImage("Деталь #2", "https://via.placeholder.com/150/00FF00/000000?text=Деталь+2", 850.50);
     </script>
 </body>
 </html>
