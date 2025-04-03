@@ -3,113 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор разборов (Только код)</title>
+    <title>Калькулятор разборов SA-MP</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            background-image: url('https://i.imgur.com/JYjZb7a.png');
+            background-attachment: fixed;
+            background-size: cover;
         }
+        
+        h1, h2, h3 {
+            color: #FFA500;
+            text-shadow: 1px 1px 2px #000;
+            border-bottom: 2px solid #FFA500;
+            padding-bottom: 5px;
+        }
+        
+        .container {
+            background-color: rgba(30, 30, 30, 0.85);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            margin-bottom: 20px;
+        }
+        
         .input-group {
             margin-bottom: 15px;
         }
+        
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: #FFA500;
         }
+        
         input {
-            padding: 8px;
+            padding: 10px;
             width: 100%;
             box-sizing: border-box;
+            background-color: #333;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
         }
+        
+        input:focus {
+            outline: none;
+            border-color: #FFA500;
+            box-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
+        }
+        
         button {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 12px 20px;
+            background-color: #FF8C00;
+            color: #000;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-transform: uppercase;
         }
+        
         button:hover {
-            background-color: #45a049;
+            background-color: #FFA500;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
         }
+        
         #result {
             margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f8f8;
+            padding: 20px;
+            background-color: rgba(40, 40, 40, 0.8);
             border-radius: 5px;
             font-size: 18px;
+            border-left: 5px solid #FFA500;
         }
+        
         .car-container {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: rgba(50, 50, 50, 0.5);
+            border-radius: 5px;
         }
+        
         .image-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             margin-top: 20px;
+            justify-content: center;
         }
+        
         .image-item {
-            width: 180px;
+            width: 200px;
             text-align: center;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
+            border: 2px solid #444;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(40, 40, 40, 0.8);
+            transition: all 0.3s;
         }
+        
+        .image-item:hover {
+            transform: scale(1.05);
+            border-color: #FFA500;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+        }
+        
         .image-item img {
             max-width: 100%;
             height: 120px;
             object-fit: cover;
             margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+        }
+        
+        .samp-header {
+            background: linear-gradient(to right, #FF8C00, #FFA500);
+            color: #000;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 24px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            border-bottom: 3px solid #000;
+        }
+        
+        .samp-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .difference-positive {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .difference-negative {
+            color: #F44336;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Калькулятор разборов</h1>
+    <div class="samp-header">SAN ANDREAS MULTIPLAYER | КАЛЬКУЛЯТОР РАЗБОРОВ</div>
     
-    <div class="input-group">
-        <label for="pricePerDisassembly">Цена за 1 разбор:</label>
-        <input type="text" id="pricePerDisassembly" placeholder="Введите цену за 1 разбор" oninput="formatNumberInput(this)">
+    <div class="container">
+        <div class="input-group">
+            <label for="pricePerDisassembly">Цена за 1 разбор ($):</label>
+            <input type="text" id="pricePerDisassembly" placeholder="Введите цену за 1 разбор" oninput="formatNumberInput(this)">
+        </div>
+        
+        <div class="input-group">
+            <label for="disassemblyCount">Количество разборов:</label>
+            <input type="text" id="disassemblyCount" placeholder="Введите количество разборов" oninput="formatNumberInput(this)">
+        </div>
+        
+        <h3>Цены за авто ($):</h3>
+        <div id="carPricesContainer">
+            <div class="car-container">
+                <input type="text" class="carPrice" placeholder="Введите цену за авто" oninput="formatNumberInput(this)">
+            </div>
+        </div>
+        <button id="addCarBtn">Добавить авто</button>
+        
+        <div class="input-group">
+            <label for="boxPrice">Цена за ящик ($):</label>
+            <input type="text" id="boxPrice" placeholder="Введите цену за ящик" oninput="formatNumberInput(this)">
+        </div>
+        
+        <button id="calculateBtn">РАССЧИТАТЬ</button>
+        
+        <div id="result"></div>
     </div>
     
-    <div class="input-group">
-        <label for="disassemblyCount">Количество разборов:</label>
-        <input type="text" id="disassemblyCount" placeholder="Введите количество разборов" oninput="formatNumberInput(this)">
-    </div>
-    
-    <h3>Цены за авто:</h3>
-    <div id="carPricesContainer">
-        <div class="car-container">
-            <input type="text" class="carPrice" placeholder="Введите цену за авто" oninput="formatNumberInput(this)">
+    <div class="container">
+        <h3>РЕКОМЕНДОВАННЫЕ АВТО К ПОКУПКЕ:</h3>
+        <div class="image-container" id="imageContainer">
+            <!-- Сюда добавляются картинки через JS -->
         </div>
     </div>
-    <button id="addCarBtn">Добавить еще авто</button>
     
-    <div class="input-group">
-        <label for="boxPrice">Цена за ящик:</label>
-        <input type="text" id="boxPrice" placeholder="Введите цену за ящик" oninput="formatNumberInput(this)">
-    </div>
-    
-    <button id="calculateBtn">Рассчитать</button>
-    
-    <div id="result"></div>
-    
-    <h3>Рекомендованные авто к покупке:</h3>
-    <div class="image-container" id="imageContainer">
-        <!-- Сюда добавляются картинки через JS -->
+    <div class="samp-footer">
+        SA-MP Разборы © 2023 | v1.0 | Для сервера Los Santos RolePlay
     </div>
     
     <script>
         // Функция для форматирования числа с разделителями тысяч
         function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         // Функция для парсинга форматированного числа
         function parseFormattedNumber(str) {
-            return parseFloat(str.replace(/\./g, '')) || 0;
+            return parseFloat(str.replace(/,/g, '')) || 0;
         }
 
         // Форматирование ввода в реальном времени
@@ -156,17 +262,19 @@
             const totalExpenses = totalDisassemblyCost + totalCarPrice;
             const difference = boxPrice - totalExpenses;
             
+            const differenceClass = difference >= 0 ? 'difference-positive' : 'difference-negative';
+            
             document.getElementById('result').innerHTML = `
-                <strong>Результаты:</strong><br>
-                Общая стоимость разборов: ${formatNumber(totalDisassemblyCost)}<br>
-                Общая стоимость авто: ${formatNumber(totalCarPrice)}<br>
-                Всего затрат: ${formatNumber(totalExpenses)}<br>
-                Цена ящика: ${formatNumber(boxPrice)}<br>
-                <strong>Разница: ${formatNumber(difference)}</strong>
+                <strong>РЕЗУЛЬТАТЫ:</strong><br><br>
+                <strong>Общая стоимость разборов:</strong> $${formatNumber(totalDisassemblyCost)}<br>
+                <strong>Общая стоимость авто:</strong> $${formatNumber(totalCarPrice)}<br>
+                <strong>Всего затрат:</strong> $${formatNumber(totalExpenses)}<br>
+                <strong>Цена ящика:</strong> $${formatNumber(boxPrice)}<br><br>
+                <strong class="${differenceClass}">Разница: $${formatNumber(difference)}</strong>
             `;
         });
 
-        // ===== ДОБАВЛЕНИЕ КАРТИНОК (ТОЛЬКО ЧЕРЕЗ КОД) =====
+        // ===== ДОБАВЛЕНИЕ КАРТИНОК =====
         /**
          * Добавляет новую картинку в галерею
          * @param {string} name - Название картинки
@@ -179,17 +287,21 @@
             imageItem.className = 'image-item';
             imageItem.innerHTML = `
                 <img src="${imageUrl}" alt="${name}" 
-                     onerror="this.src='https://via.placeholder.com/150?text=Ошибка+загрузки'">
+                     onerror="this.src='https://via.placeholder.com/150/333333/FFA500?text=Ошибка+загрузки'">
                 <div><strong>${name}</strong></div>
-                <div>Цена: ${formatNumber(price)}</div>
+                <div>Цена: $${formatNumber(price)}</div>
             `;
             container.appendChild(imageItem);
         }
 
         // === ПРИМЕР ДОБАВЛЕНИЯ КАРТИНОК ===
-        // (можно удалить или заменить на свои)
-        addImage("Renault Twizi | Luxe класс", "5068-150x150.png", 525000);
-        addImage("Деталь #2", "https://via.placeholder.com/150/00FF00/000000?text=Деталь+2", 850500);
+        // Автомобили в стиле SA-MP/GTA
+        addImage("Infernus", "https://i.imgur.com/JYjZb7a.png", 1000000);
+        addImage("Turismo", "https://i.imgur.com/4Z3jQ7a.png", 850000);
+        addImage("Bullet", "https://i.imgur.com/9X9QZ7a.png", 750000);
+        addImage("Cheetah", "https://i.imgur.com/7X7QZ7a.png", 900000);
+        addImage("Super GT", "https://i.imgur.com/8X8QZ7a.png", 800000);
+        addImage("Phoenix", "https://i.imgur.com/5X5QZ7a.png", 650000);
     </script>
 </body>
 </html>
