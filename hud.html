@@ -161,6 +161,59 @@
             color: #F44336;
             font-weight: bold;
         }
+        
+        .category-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #444;
+        }
+        
+        .category-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #333;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            transition: all 0.3s;
+        }
+        
+        .category-tab:hover, .category-tab.active {
+            background-color: #FF8C00;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .category-content {
+            display: none;
+        }
+        
+        .category-content.active {
+            display: block;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .luxury {
+            background-color: #FFD700;
+            color: #000;
+        }
+        
+        .medium {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        
+        .low {
+            background-color: #F44336;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -197,8 +250,28 @@
     
     <div class="container">
         <h3>РЕКОМЕНДОВАННЫЕ АВТО К ПОКУПКЕ:</h3>
-        <div class="image-container" id="imageContainer">
-            <!-- Сюда добавляются картинки через JS -->
+        
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="all">Все авто</div>
+            <div class="category-tab" data-category="luxury">Люкс (1)</div>
+            <div class="category-tab" data-category="medium">Средний (2)</div>
+            <div class="category-tab" data-category="low">Низкий (3)</div>
+        </div>
+        
+        <div id="all-cars" class="category-content active">
+            <div class="image-container" id="imageContainerAll"></div>
+        </div>
+        
+        <div id="luxury-cars" class="category-content">
+            <div class="image-container" id="imageContainerLuxury"></div>
+        </div>
+        
+        <div id="medium-cars" class="category-content">
+            <div class="image-container" id="imageContainerMedium"></div>
+        </div>
+        
+        <div id="low-cars" class="category-content">
+            <div class="image-container" id="imageContainerLow"></div>
         </div>
     </div>
     
@@ -275,28 +348,76 @@
          * @param {string} name - Название картинки
          * @param {string} imageUrl - Ссылка на изображение
          * @param {number} price - Цена
+         * @param {number} category - Категория (1 - Люкс, 2 - Средний, 3 - Низкий)
          */
-        function addImage(name, imageUrl, price) {
-            const container = document.getElementById('imageContainer');
-            const imageItem = document.createElement('div');
-            imageItem.className = 'image-item';
-            imageItem.innerHTML = `
+        function addImage(name, imageUrl, price, category = 0) {
+            // Определяем контейнер в зависимости от категории
+            let containerId = "imageContainerAll";
+            let badge = "";
+            
+            if (category === 1) {
+                containerId = "imageContainerLuxury";
+                badge = '<span class="category-badge luxury">Люкс</span>';
+            } else if (category === 2) {
+                containerId = "imageContainerMedium";
+                badge = '<span class="category-badge medium">Средний</span>';
+            } else if (category === 3) {
+                containerId = "imageContainerLow";
+                badge = '<span class="category-badge low">Низкий</span>';
+            }
+            
+            // Создаем элемент для общего контейнера
+            const containerAll = document.getElementById("imageContainerAll");
+            const imageItemAll = document.createElement('div');
+            imageItemAll.className = 'image-item';
+            imageItemAll.innerHTML = `
                 <img src="${imageUrl}" alt="${name}" 
                      onerror="this.src='https://via.placeholder.com/150/333333/FFA500?text=Ошибка+загрузки'">
-                <div><strong>${name}</strong></div>
+                <div><strong>${name}</strong>${badge}</div>
                 <div>Цена: $${formatNumber(price)}</div>
             `;
-            container.appendChild(imageItem);
+            containerAll.appendChild(imageItemAll);
+            
+            // Если есть категория, добавляем в соответствующий контейнер
+            if (category > 0) {
+                const container = document.getElementById(containerId);
+                const imageItem = imageItemAll.cloneNode(true);
+                container.appendChild(imageItem);
+            }
         }
 
+        // Переключение между категориями
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Убираем активный класс у всех вкладок
+                document.querySelectorAll('.category-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Добавляем активный класс текущей вкладке
+                this.classList.add('active');
+                
+                // Скрываем все контейнеры
+                document.querySelectorAll('.category-content').forEach(c => {
+                    c.classList.remove('active');
+                });
+                
+                // Показываем нужный контейнер
+                const category = this.getAttribute('data-category');
+                document.getElementById(`${category}-cars`).classList.add('active');
+            });
+        });
+
         // === ПРИМЕР ДОБАВЛЕНИЯ КАРТИНОК ===
-        // Автомобили в стиле SA-MP/GTA
-        addImage("Infernus", "https://i.imgur.com/JYjZb7a.png", 1000000);
-        addImage("Turismo", "https://i.imgur.com/4Z3jQ7a.png", 850000);
-        addImage("Bullet", "https://i.imgur.com/9X9QZ7a.png", 750000);
-        addImage("Cheetah", "https://i.imgur.com/7X7QZ7a.png", 900000);
-        addImage("Super GT", "https://i.imgur.com/8X8QZ7a.png", 800000);
-        addImage("Phoenix", "https://i.imgur.com/5X5QZ7a.png", 650000);
+        // Автомобили в стиле SA-MP/GTA с категориями
+        addImage("Infernus", "https://i.imgur.com/JYjZb7a.png", 1000000, 1);
+        addImage("Turismo", "https://i.imgur.com/4Z3jQ7a.png", 850000, 1);
+        addImage("Bullet", "https://i.imgur.com/9X9QZ7a.png", 750000, 2);
+        addImage("Cheetah", "https://i.imgur.com/7X7QZ7a.png", 900000, 1);
+        addImage("Super GT", "https://i.imgur.com/8X8QZ7a.png", 800000, 2);
+        addImage("Phoenix", "https://i.imgur.com/5X5QZ7a.png", 650000, 3);
+        addImage("Elegy", "https://i.imgur.com/3X3QZ7a.png", 600000, 3);
+        addImage("Sultan", "https://i.imgur.com/2X2QZ7a.png", 550000, 3);
     </script>
 </body>
 </html>
