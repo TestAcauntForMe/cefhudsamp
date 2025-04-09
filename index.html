@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Торговая площадка</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Торговая площадка</h1>
+        <div id="auth-buttons">
+            <button id="login-btn">Войти</button>
+            <button id="register-btn">Регистрация</button>
+        </div>
+        <div id="user-profile" style="display:none;">
+            <span id="username"></span>
+            <button id="logout-btn">Выйти</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="products">
+            <!-- Товары будут загружаться через JS -->
+        </section>
+
+        <section id="personal-cabinet" style="display:none;">
+            <h2>Личный кабинет</h2>
+            <div id="user-orders"></div>
+        </section>
+    </main>
+
+    <!-- Модальные окна -->
+    <div id="login-modal" class="modal">
+        <!-- Форма входа -->
+    </div>
+
+    <div id="register-modal" class="modal">
+        <!-- Форма регистрации -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
