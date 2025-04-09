@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     let currentUser = null;
-    let userOrders = [];
     let userAds = [];
 
     // Элементы DOM
@@ -19,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logout-btn');
     const productsSection = document.getElementById('products');
     const personalCabinet = document.getElementById('personal-cabinet');
-    const userOrdersSection = document.getElementById('user-orders');
     const createAdBtn = document.getElementById('create-ad-btn');
     const createAdForm = document.getElementById('create-ad-form');
     const adForm = document.getElementById('ad-form');
@@ -28,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerModal = document.getElementById('register-modal');
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const closeButtons = document.querySelectorAll('.close');
 
     // Инициализация
     renderProducts();
@@ -69,38 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const product = products.find(p => p.id === productId);
         if (product) {
-            userOrders.push({
-                id: Date.now(),
-                productId: product.id,
-                productName: product.name,
-                price: product.price,
-                date: new Date().toLocaleString()
-            });
-            updateUserOrders();
             alert(`Вы купили ${product.name} за ${product.price} руб.`);
         }
-    }
-
-    // Функция обновления списка заказов
-    function updateUserOrders() {
-        userOrdersSection.innerHTML = '';
-        if (userOrders.length === 0) {
-            userOrdersSection.innerHTML = '<p>У вас пока нет заказов</p>';
-            return;
-        }
-
-        const ordersList = document.createElement('ul');
-        userOrders.forEach(order => {
-            const orderItem = document.createElement('li');
-            orderItem.innerHTML = `
-                <p>Товар: ${order.productName}</p>
-                <p>Цена: ${order.price} руб.</p>
-                <p>Дата: ${order.date}</p>
-                <hr>
-            `;
-            ordersList.appendChild(orderItem);
-        });
-        userOrdersSection.appendChild(ordersList);
     }
 
     // Функция проверки авторизации
@@ -112,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
             userProfile.style.display = 'block';
             usernameSpan.textContent = currentUser.username;
             personalCabinet.style.display = 'block';
-            updateUserOrders();
             renderUserAds();
         }
     }
@@ -181,8 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loginBtn.addEventListener('click', () => showModal(loginModal));
     registerBtn.addEventListener('click', () => showModal(registerModal));
 
-    document.querySelectorAll('.close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', function() {
+    closeButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
             const modal = this.closest('.modal');
             hideModal(modal);
         });
@@ -199,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
         
-        // Простая проверка (в реальном приложении нужно обращаться к серверу)
+        // Простая проверка
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         const user = users.find(u => u.username === username && u.password === password);
         
@@ -247,9 +215,15 @@ document.addEventListener('DOMContentLoaded', function() {
     createAdBtn.addEventListener('click', function() {
         if (!currentUser) {
             alert('Для создания объявления войдите в систему');
+            showModal(loginModal);
             return;
         }
-        createAdForm.style.display = createAdForm.style.display === 'none' ? 'block' : 'none';
+        
+        if (createAdForm.style.display === 'none' || !createAdForm.style.display) {
+            createAdForm.style.display = 'block';
+        } else {
+            createAdForm.style.display = 'none';
+        }
     });
 
     adForm.addEventListener('submit', function(e) {
@@ -284,6 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             reader.readAsDataURL(photoInput.files[0]);
+        } else {
+            alert('Пожалуйста, выберите фото для объявления');
         }
     });
 });
