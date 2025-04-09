@@ -39,11 +39,12 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .product-card img, .user-ad img {
     max-width: 100%;
-    height: auto;
+    max-height: 200px;
     display: block;
     margin: 1rem 0;
 }
@@ -82,10 +83,13 @@ button:hover {
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
-#ad-form input, #ad-form textarea, 
-#login-form input, #register-form input {
+#ad-form input, 
+#ad-form textarea, 
+#login-form input, 
+#register-form input {
     display: block;
     width: 100%;
     margin-bottom: 1rem;
@@ -94,7 +98,7 @@ button:hover {
 }
 
 #ad-form textarea {
-    height: 100px;
+    min-height: 100px;
     resize: vertical;
 }
 
@@ -104,4 +108,8 @@ button:hover {
 
 .delete-ad-btn:hover {
     background-color: #d32f2f;
+}
+
+#user-ads {
+    margin-top: 2rem;
 }
