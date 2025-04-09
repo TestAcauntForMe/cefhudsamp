@@ -26,17 +26,51 @@
 
         <section id="personal-cabinet" style="display:none;">
             <h2>Личный кабинет</h2>
+            <button id="create-ad-btn">Создать объявление</button>
+            
+            <div id="create-ad-form" style="display:none;">
+                <h3>Новое объявление</h3>
+                <form id="ad-form">
+                    <input type="text" id="ad-title" placeholder="Название" required>
+                    <textarea id="ad-description" placeholder="Описание" required></textarea>
+                    <input type="number" id="ad-price" placeholder="Цена" required>
+                    <input type="file" id="ad-photo" accept="image/*" required>
+                    <button type="submit">Опубликовать</button>
+                </form>
+            </div>
+            
+            <div id="user-ads">
+                <h3>Мои объявления</h3>
+                <div id="ads-list"></div>
+            </div>
+            
             <div id="user-orders"></div>
         </section>
     </main>
 
     <!-- Модальные окна -->
-    <div id="login-modal" class="modal">
-        <!-- Форма входа -->
+    <div id="login-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход</h2>
+            <form id="login-form">
+                <input type="text" id="login-username" placeholder="Логин" required>
+                <input type="password" id="login-password" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+            </form>
+        </div>
     </div>
 
-    <div id="register-modal" class="modal">
-        <!-- Форма регистрации -->
+    <div id="register-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="register-form">
+                <input type="text" id="register-username" placeholder="Логин" required>
+                <input type="password" id="register-password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
     </div>
 
     <script src="script.js"></script>
