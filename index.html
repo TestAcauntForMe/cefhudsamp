@@ -34,23 +34,37 @@
             height: 100%;
             opacity: 0;
             animation: 
-                jumpInFromLeft 4s ease-out forwards,
-                jumpOutToLeft 4s ease-in 8s forwards;
+                jumpInFromLeft 3s ease-out forwards,
+                jumpOutToLeft 3s ease-in 7s forwards;
             border: 3px solid #333;
             border-radius: 15px;
             background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .hand {
+        .hand-container {
             position: absolute;
+            top: 50%;
+            right: -200px;
+            transform: translateY(-50%);
+            z-index: 3;
+            animation: handScan 4s ease-in-out 3s forwards;
+        }
+
+        .hand {
+            position: relative;
+            width: 250px;
+            height: 250px;
+        }
+
+        .phone {
+            position: absolute;
+            top: 50px;
+            left: 80px;
             width: 180px;
             height: 250px;
-            bottom: 100px;
-            right: 100px;
-            opacity: 0;
-            z-index: 3;
-            animation: handAppear 2s ease-in-out 4s forwards;
+            z-index: 2;
+            animation: phoneTap 0.5s ease-in-out 5s 3;
         }
 
         .phone-screen {
@@ -62,7 +76,7 @@
             background: white;
             border-radius: 10px;
             overflow: hidden;
-            z-index: 4;
+            z-index: 3;
         }
 
         .phone-qr {
@@ -81,8 +95,20 @@
                 rgba(255,255,255,0.6) 50%, 
                 transparent 100%);
             opacity: 0;
-            z-index: 5;
-            animation: scanLine 1s ease-in-out 5s;
+            z-index: 4;
+            animation: scanLine 1s ease-in-out 5.5s;
+        }
+
+        .finger {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            width: 30px;
+            height: 40px;
+            background: #ffccbc;
+            border-radius: 15px 15px 0 0;
+            z-index: 1;
+            animation: fingerTap 0.5s ease-in-out 5s 3;
         }
 
         @keyframes jumpInFromLeft {
@@ -90,42 +116,54 @@
                 opacity: 0;
                 transform: translate(-1000px, -50%) scale(0.5);
             }
-            20% {
+            15% {
                 opacity: 1;
-                transform: translate(100px, -50%) scale(1.1);
+                transform: translate(150px, -50%) scale(1.2);
             }
-            40% {
-                transform: translate(50px, -50%) scale(1);
+            30% {
+                transform: translate(80px, -50%) scale(0.9);
+            }
+            45% {
+                transform: translate(120px, -50%) scale(1.1);
             }
             60% {
-                transform: translate(80px, -50%) scale(1.05);
+                transform: translate(90px, -50%) scale(0.95);
             }
-            80% {
-                transform: translate(60px, -50%) scale(1.02);
+            75% {
+                transform: translate(110px, -50%) scale(1.05);
+            }
+            90% {
+                transform: translate(95px, -50%) scale(0.98);
             }
             100% {
                 opacity: 1;
-                transform: translate(calc(50vw - 100px), -50%) scale(1);
+                transform: translate(calc(50vw - 300px), -50%) scale(1);
             }
         }
 
         @keyframes jumpOutToLeft {
             0% {
                 opacity: 1;
-                transform: translate(calc(50vw - 100px), -50%) scale(1);
+                transform: translate(calc(50vw - 300px), -50%) scale(1);
             }
-            20% {
-                transform: translate(calc(50vw - 150px), -50%) scale(1.05);
+            15% {
+                transform: translate(calc(50vw - 350px), -50%) scale(1.1);
             }
-            40% {
-                transform: translate(calc(50vw - 100px), -50%) scale(0.95);
+            30% {
+                transform: translate(calc(50vw - 250px), -50%) scale(0.9);
+            }
+            45% {
+                transform: translate(calc(50vw - 400px), -50%) scale(1.05);
             }
             60% {
-                transform: translate(calc(50vw - 200px), -50%) scale(0.9);
+                transform: translate(calc(50vw - 200px), -50%) scale(0.85);
             }
-            80% {
+            75% {
+                transform: translate(calc(50vw - 450px), -50%) scale(0.95);
+            }
+            90% {
                 opacity: 1;
-                transform: translate(calc(50vw - 50px), -50%) scale(0.7);
+                transform: translate(calc(50vw - 150px), -50%) scale(0.7);
             }
             100% {
                 opacity: 0;
@@ -133,19 +171,35 @@
             }
         }
 
-        @keyframes handAppear {
+        @keyframes handScan {
             0% {
                 opacity: 0;
-                transform: translateY(100px);
+                transform: translate(200px, -50%);
             }
-            50% {
+            25% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate(calc(-50vw + 150px), -50%);
+            }
+            75% {
+                opacity: 1;
+                transform: translate(calc(-50vw + 150px), -50%);
             }
             100% {
-                opacity: 1;
-                transform: translateY(0);
+                opacity: 0;
+                transform: translate(200px, -50%);
             }
+        }
+
+        @keyframes phoneTap {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes fingerTap {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(20px); }
+            100% { transform: translateY(0); }
         }
 
         @keyframes scanLine {
@@ -170,21 +224,29 @@
         </div>
         
         <!-- Рука с телефоном -->
-        <div class="hand">
-            <!-- Тело телефона -->
-            <svg width="180" height="250" viewBox="0 0 180 250">
-                <!-- Корпус телефона -->
-                <rect x="20" y="10" width="140" height="230" rx="20" fill="#333"/>
-                <!-- Экран телефона -->
-                <rect x="30" y="20" width="120" height="160" rx="10" fill="#fff"/>
-                <!-- Кнопка -->
-                <rect x="80" y="195" width="20" height="5" rx="2" fill="#666"/>
-            </svg>
-            
-            <!-- QR-код на экране телефона -->
-            <div class="phone-screen">
-                <img class="phone-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x160&data=ScanMe!" alt="QR Code">
-                <div class="scan-effect"></div>
+        <div class="hand-container">
+            <div class="hand">
+                <!-- Палец -->
+                <div class="finger"></div>
+                
+                <!-- Телефон -->
+                <div class="phone">
+                    <!-- Тело телефона -->
+                    <svg width="180" height="250" viewBox="0 0 180 250">
+                        <!-- Корпус телефона -->
+                        <rect x="20" y="10" width="140" height="230" rx="20" fill="#333"/>
+                        <!-- Экран телефона -->
+                        <rect x="30" y="20" width="120" height="160" rx="10" fill="#fff"/>
+                        <!-- Кнопка -->
+                        <rect x="80" y="195" width="20" height="5" rx="2" fill="#666"/>
+                    </svg>
+                    
+                    <!-- QR-код на экране телефона -->
+                    <div class="phone-screen">
+                        <img class="phone-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=120x160&data=ScanMe!" alt="QR Code">
+                        <div class="scan-effect"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
