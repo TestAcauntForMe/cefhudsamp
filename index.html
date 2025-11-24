@@ -15,15 +15,15 @@
 
         .scene {
             position: relative;
-            width: 300px;
-            height: 400px;
+            width: 100%;
+            height: 100vh;
         }
 
         .qr-container {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            left: 0;
+            transform: translateY(-50%);
             width: 200px;
             height: 200px;
             z-index: 2;
@@ -34,8 +34,8 @@
             height: 100%;
             opacity: 0;
             animation: 
-                jumpIn 4s ease-out forwards,
-                jumpOut 4s ease-in 8s forwards;
+                jumpInFromLeft 4s ease-out forwards,
+                jumpOutToLeft 4s ease-in 8s forwards;
             border: 3px solid #333;
             border-radius: 15px;
             background: white;
@@ -46,11 +46,11 @@
             position: absolute;
             width: 180px;
             height: 250px;
-            bottom: 50px;
-            right: -200px;
+            bottom: 100px;
+            right: 100px;
             opacity: 0;
             z-index: 3;
-            animation: handScan 3s ease-in-out 4s forwards;
+            animation: handAppear 2s ease-in-out 4s forwards;
         }
 
         .phone-screen {
@@ -82,73 +82,69 @@
                 transparent 100%);
             opacity: 0;
             z-index: 5;
-            animation: scanLine 1s ease-in-out 5.5s;
+            animation: scanLine 1s ease-in-out 5s;
         }
 
-        @keyframes jumpIn {
+        @keyframes jumpInFromLeft {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -1000px) scale(0.5);
+                transform: translate(-1000px, -50%) scale(0.5);
             }
             20% {
                 opacity: 1;
-                transform: translate(-50%, 50px) scale(1.1);
+                transform: translate(100px, -50%) scale(1.1);
             }
             40% {
-                transform: translate(-50%, -50px) scale(1);
+                transform: translate(50px, -50%) scale(1);
             }
             60% {
-                transform: translate(-50%, 30px) scale(1.05);
+                transform: translate(80px, -50%) scale(1.05);
             }
             80% {
-                transform: translate(-50%, -20px) scale(1.02);
+                transform: translate(60px, -50%) scale(1.02);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, 0) scale(1);
+                transform: translate(calc(50vw - 100px), -50%) scale(1);
             }
         }
 
-        @keyframes jumpOut {
+        @keyframes jumpOutToLeft {
             0% {
                 opacity: 1;
-                transform: translate(-50%, 0) scale(1);
+                transform: translate(calc(50vw - 100px), -50%) scale(1);
             }
             20% {
-                transform: translate(-50%, -80px) scale(1.05);
+                transform: translate(calc(50vw - 150px), -50%) scale(1.05);
             }
             40% {
-                transform: translate(-50%, 40px) scale(0.95);
+                transform: translate(calc(50vw - 100px), -50%) scale(0.95);
             }
             60% {
-                transform: translate(-50%, -120px) scale(0.9);
+                transform: translate(calc(50vw - 200px), -50%) scale(0.9);
             }
             80% {
                 opacity: 1;
-                transform: translate(-50%, 60px) scale(0.7);
+                transform: translate(calc(50vw - 50px), -50%) scale(0.7);
             }
             100% {
                 opacity: 0;
-                transform: translate(-50%, 1000px) scale(0.3);
+                transform: translate(-1000px, -50%) scale(0.3);
             }
         }
 
-        @keyframes handScan {
+        @keyframes handAppear {
             0% {
                 opacity: 0;
-                transform: translateX(200px);
+                transform: translateY(100px);
             }
-            30% {
+            50% {
                 opacity: 1;
-                transform: translateX(-50px);
-            }
-            70% {
-                opacity: 1;
-                transform: translateX(-50px);
+                transform: translateY(0);
             }
             100% {
-                opacity: 0;
-                transform: translateX(200px);
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
